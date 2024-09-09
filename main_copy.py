@@ -19,7 +19,7 @@ def post_message():
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('index.html')
 
 # Удалите ненужные маршруты для статики, они не нужны
 # @app.route('/styles.css')

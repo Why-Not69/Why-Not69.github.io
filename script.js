@@ -28,17 +28,20 @@ async function sendMessage() {
             },
             body: JSON.stringify({ message: messageText }),
         });
+        fetchMessages();  // Обнови сообщения после отправки
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
+
 async function fetchMessages() {
     try {
         const response = await fetch(`${serverUrl}/messages`);
         const messages = await response.json();
+        console.log('Fetched messages:', messages);  // Проверь, что сообщения получены
         const chatWindow = document.getElementById('chat-window');
-        chatWindow.innerHTML = '';
+        chatWindow.innerHTML = '';  // Очистить чат перед добавлением новых сообщений
         messages.forEach(msg => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', 'their-message');
@@ -47,9 +50,10 @@ async function fetchMessages() {
         });
         scrollToBottom();
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching messages:', error);
     }
 }
+
 
 function scrollToBottom() {
     const chatWindow = document.getElementById('chat-window');

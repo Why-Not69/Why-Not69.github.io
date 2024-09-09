@@ -31,3 +31,28 @@ function scrollToBottom() {
     const chatWindow = document.getElementById('chat-window');
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
+
+async function sendMessage() {
+    const inputField = document.getElementById('message-input');
+    const messageText = inputField.value.trim();
+    
+    if (messageText === '') return;
+    
+    // Отправка сообщения на сервер
+    await fetch('https://your-server.com/send-message', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: messageText }),
+    });
+    
+    // Отображение сообщения в чате
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'my-message');
+    messageElement.textContent = messageText;
+    
+    document.getElementById('chat-window').appendChild(messageElement);
+    inputField.value = '';
+    scrollToBottom();
+}

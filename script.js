@@ -42,12 +42,17 @@ async function fetchMessages() {
         
         const chatWindow = document.getElementById('chat-window');
 
-        // Добавление новых сообщений
+        // Проверка сообщений и добавление только новых
         messages.forEach(msg => {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
-            messageElement.textContent = msg.message;
-            chatWindow.appendChild(messageElement);
+            const existingMessages = document.querySelectorAll('#chat-window .message');
+            const alreadyExists = Array.from(existingMessages).some(existingMessage => existingMessage.textContent === msg.message);
+
+            if (!alreadyExists) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
+                messageElement.textContent = msg.message;
+                chatWindow.appendChild(messageElement);
+            }
         });
 
         scrollToBottom();
@@ -56,12 +61,13 @@ async function fetchMessages() {
     }
 }
 
-
-
-
 function scrollToBottom() {
     const chatWindow = document.getElementById('chat-window');
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
+// Обновление сообщений каждые 5 секунд
+setInterval(fetchMessages, 5000);
+
+// Загрузка сообщений при первой загрузке страницы
 document.addEventListener('DOMContentLoaded', fetchMessages);

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.')
 
 messages = []
 
@@ -19,16 +19,11 @@ def post_message():
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('index.html')
+    return send_from_directory('.', 'index.html')
 
-# Удалите ненужные маршруты для статики, они не нужны
-# @app.route('/styles.css')
-# def serve_styles():
-#     return send_from_directory('static', 'styles.css')
-
-# @app.route('/script.js')
-# def serve_script():
-#     return send_from_directory('static', 'script.js')
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('.', filename)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))

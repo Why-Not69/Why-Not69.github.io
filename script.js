@@ -26,26 +26,25 @@ async function sendMessage() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: messageText }),
+            body: JSON.stringify({ message: messageText, sender: 'myself' }), // Добавьте идентификатор отправителя
         });
-        fetchMessages();  // Обнови сообщения после отправки
+        fetchMessages();  // Обновите сообщения после отправки
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-
 async function fetchMessages() {
     try {
         const response = await fetch(`${serverUrl}/messages`);
         const messages = await response.json();
-        console.log('Fetched messages:', messages);  // Проверь, что сообщения получены
+        console.log('Fetched messages:', messages);  // Проверьте, что сообщения получены
         const chatWindow = document.getElementById('chat-window');
         chatWindow.innerHTML = '';  // Очистить чат перед добавлением новых сообщений
         messages.forEach(msg => {
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'their-message');
-            messageElement.textContent = msg;
+            messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
+            messageElement.textContent = msg.message;
             chatWindow.appendChild(messageElement);
         });
         scrollToBottom();
@@ -53,7 +52,6 @@ async function fetchMessages() {
         console.error('Error fetching messages:', error);
     }
 }
-
 
 function scrollToBottom() {
     const chatWindow = document.getElementById('chat-window');

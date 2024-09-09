@@ -3,7 +3,8 @@ document.getElementById('message-input').addEventListener('keypress', function (
     if (e.key === 'Enter') sendMessage();
 });
 
-const serverUrl = 'https://worldchat-ae-com.onrender.com';  // URL, предоставленный ngrok
+const serverUrl = 'https://worldchat-ae-com.onrender.com';
+  // URL, предоставленный ngrok
 
 async function sendMessage() {
     const inputField = document.getElementById('message-input');

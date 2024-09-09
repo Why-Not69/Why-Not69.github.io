@@ -3,7 +3,7 @@ document.getElementById('message-input').addEventListener('keypress', function (
     if (e.key === 'Enter') sendMessage();
 });
 
-const serverUrl = 'https://5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app';  // URL, предоставленный ngrok
+const serverUrl = '5262-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app';  // URL, предоставленный ngrok
 
 async function sendMessage() {
     const inputField = document.getElementById('message-input');

@@ -7,9 +7,15 @@ const serverUrl = 'https://2c70-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-fr
 
 async function sendMessage() {
     const inputField = document.getElementById('message-input');
-    const messageText = inputField.value.trim();
+    let messageText = inputField.value.trim();
     
     if (messageText === '') return;
+
+    // Ограничение длины сообщения
+    if (messageText.length > 50) {
+        messageText = messageText.substring(0, 50); // Обрезаем сообщение до 50 символов
+        alert('Сообщение было обрезано до 50 символов');
+    }
     
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', 'my-message');
@@ -33,6 +39,7 @@ async function sendMessage() {
         console.error('Error sending message:', error);
     }
 }
+
 
 async function fetchMessages() {
     try {

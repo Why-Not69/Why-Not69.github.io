@@ -30,31 +30,26 @@ async function sendMessage() {
         });
         fetchMessages();  // Обновите сообщения после отправки
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error sending message:', error);
     }
 }
 
 async function fetchMessages() {
     try {
         const response = await fetch(`${serverUrl}/messages`);
-        const messages = await response.json();
-        console.log('Fetched messages:', messages);  // Проверьте содержимое сообщений
-        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json(); // Попробуйте преобразовать текст в JSON
+        console.log('Fetched messages:', data);
         const chatWindow = document.getElementById('chat-window');
-
-        // Проверка сообщений и добавление только новых
-        messages.forEach(msg => {
-            const existingMessages = document.querySelectorAll('#chat-window .message');
-            const alreadyExists = Array.from(existingMessages).some(existingMessage => existingMessage.textContent === msg.message);
-
-            if (!alreadyExists) {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
-                messageElement.textContent = msg.message;
-                chatWindow.appendChild(messageElement);
-            }
+        chatWindow.innerHTML = '';  // Очистить чат перед добавлением новых сообщений
+        data.forEach(msg => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
+            messageElement.textContent = msg.message;
+            chatWindow.appendChild(messageElement);
         });
-
         scrollToBottom();
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -66,8 +61,4 @@ function scrollToBottom() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Обновление сообщений каждые 5 секунд
-setInterval(fetchMessages, 5000);
-
-// Загрузка сообщений при первой загрузке страницы
 document.addEventListener('DOMContentLoaded', fetchMessages);

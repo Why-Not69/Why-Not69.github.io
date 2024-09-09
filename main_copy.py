@@ -1,9 +1,7 @@
+from flask import Flask, request, jsonify, send_from_directory
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 
 messages = []
 
@@ -12,15 +10,17 @@ def get_messages():
     return jsonify(messages)
 
 @app.route('/messages', methods=['POST'])
-def add_message():
-    message = request.json.get('message')
-    sender = request.json.get('sender', 'unknown')
-    if message:
-        messages.append({"message": message, "sender": sender})
-        print(f"Received POST request with message: {message} from sender: {sender}")
-        return jsonify({"status": "success", "message": "Message added"}), 201
-    return jsonify({"status": "error", "message": "No message provided"}), 400
+def post_message():
+    data = request.json
+    message = data.get('message')
+    sender = data.get('sender')
+    messages.append({'message': message, 'sender': sender})
+    return '', 201
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('static', 'index.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8000))  # Use PORT environment variable or default to 8000
+    port = int(os.environ.get('PORT', 8000))
     app.run(host='0.0.0.0', port=port)

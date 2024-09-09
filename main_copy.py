@@ -5,6 +5,7 @@ app = Flask(__name__)
 # Хранилище сообщений в памяти
 messages = []
 MAX_MESSAGES = 1000  # Максимальное количество сообщений
+MAX_MESSAGE_LENGTH = 50  # Максимальная длина сообщения
 
 # Главная страница
 @app.route('/')
@@ -28,6 +29,10 @@ def post_message():
     message = data.get('message')
     sender = data.get('sender')
     if message and sender:
+        # Ограничиваем длину сообщения
+        if len(message) > MAX_MESSAGE_LENGTH:
+            message = message[:MAX_MESSAGE_LENGTH]
+
         # Добавляем новое сообщение в список
         messages.append({'message': message, 'sender': sender})
         

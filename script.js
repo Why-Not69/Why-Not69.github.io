@@ -3,6 +3,8 @@ document.getElementById('message-input').addEventListener('keypress', function (
     if (e.key === 'Enter') sendMessage();
 });
 
+const serverUrl = 'https://5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app';  // URL, предоставленный ngrok
+
 async function sendMessage() {
     const inputField = document.getElementById('message-input');
     const messageText = inputField.value.trim();
@@ -19,7 +21,7 @@ async function sendMessage() {
 
     // Отправка сообщения на сервер
     try {
-        await fetch('5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app', {
+        await fetch(`${serverUrl}/messages`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ async function sendMessage() {
 
 async function fetchMessages() {
     try {
-        const response = await fetch('5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app');
+        const response = await fetch(`${serverUrl}/messages`);
         const messages = await response.json();
         const chatWindow = document.getElementById('chat-window');
         chatWindow.innerHTML = '';

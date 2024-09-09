@@ -19,7 +19,7 @@ async function sendMessage() {
 
     // Отправка сообщения на сервер
     try {
-        await fetch('http://localhost:5000/messages', {
+        await fetch('5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ async function sendMessage() {
 
 async function fetchMessages() {
     try {
-        const response = await fetch('http://localhost:5000/messages');
+        const response = await fetch('5438-2a02-a319-82f4-2d00-6c92-23b8-acc6-fdb0.ngrok-free.app');
         const messages = await response.json();
         const chatWindow = document.getElementById('chat-window');
         chatWindow.innerHTML = '';

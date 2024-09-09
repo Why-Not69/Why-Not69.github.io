@@ -38,13 +38,13 @@ async function fetchMessages() {
     try {
         const response = await fetch(`${serverUrl}/messages`);
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json(); // Попробуйте преобразовать текст в JSON
-        console.log('Fetched messages:', data);
+        const messages = await response.json(); // This is where the parsing happens
+        console.log('Fetched messages:', messages);  // Проверьте содержимое сообщений
         const chatWindow = document.getElementById('chat-window');
         chatWindow.innerHTML = '';  // Очистить чат перед добавлением новых сообщений
-        data.forEach(msg => {
+        messages.forEach(msg => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
             messageElement.textContent = msg.message;
@@ -55,6 +55,7 @@ async function fetchMessages() {
         console.error('Error fetching messages:', error);
     }
 }
+
 
 function scrollToBottom() {
     const chatWindow = document.getElementById('chat-window');

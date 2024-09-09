@@ -37,29 +37,25 @@ async function sendMessage() {
 async function fetchMessages() {
     try {
         const response = await fetch(`${serverUrl}/messages`);
-        
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        
         const messages = await response.json();
         console.log('Fetched messages:', messages);  // Проверьте содержимое сообщений
         
         const chatWindow = document.getElementById('chat-window');
-        chatWindow.innerHTML = '';  // Очистить чат перед добавлением новых сообщений
-        
+
+        // Добавление новых сообщений
         messages.forEach(msg => {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', msg.sender === 'myself' ? 'my-message' : 'their-message');
             messageElement.textContent = msg.message;
             chatWindow.appendChild(messageElement);
         });
-        
+
         scrollToBottom();
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
 }
+
 
 
 

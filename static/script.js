@@ -90,5 +90,22 @@ function scrollToBottom() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
+
+// Окно пополнения баланса
+document.getElementById('buy-messages-button').addEventListener('click', () => {
+    alert('Перейдите в Telegram для пополнения баланса');
+    // Логика взаимодействия с Telegram API
+});
+
+document.getElementById('close-popup-button').addEventListener('click', () => {
+    document.getElementById('balance-popup').style.display = 'none';
+    document.getElementById('chat-container').style.display = 'block';
+});
+
+// Показать окно пополнения при загрузке страницы
+window.onload = function() {
+    document.getElementById('balance-popup').style.display = 'block';
+}
+
 // Периодически запрашиваем сообщения с сервера каждые 2 секунды
-setInterval(fetchMessages, 2000);
+setInterval(fetchMessages, 1000);

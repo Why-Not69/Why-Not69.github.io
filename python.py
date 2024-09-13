@@ -17,8 +17,10 @@ def index():
 def send_message():
     data = request.get_json()
     message = data.get('message')
-    if message:
-        messages.append({'text': message, 'author': 'you'})
+    user_id = data.get('userId')  # Получаем userId из запроса
+    if message and user_id:
+        # Сохраняем сообщение с автором (userId)
+        messages.append({'text': message, 'userId': user_id})
     return jsonify({'status': 'Message received'})
 
 @app.route('/history', methods=['GET'])

@@ -4,19 +4,13 @@ document.getElementById('message-input').addEventListener('keypress', function (
 });
 
 const maxMessages = 100;
-const maxChars = 50;
-const userId = generateUserId();  // Генерируем уникальный идентификатор пользователя
 
-// Обработчик для ограничения символов в поле ввода
-document.getElementById('message-input').addEventListener('input', function () {
-    const inputField = document.getElementById('message-input');
-    const charCount = inputField.value.length;
-
-    if (charCount >= maxChars) {
-        alert('Достигнут лимит в 50 символов');
-        inputField.value = inputField.value.slice(0, maxChars);
-    }
-});
+// Генерируем уникальный идентификатор пользователя (если его нет в localStorage)
+let userId = localStorage.getItem('userId');
+if (!userId) {
+    userId = 'user-' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('userId', userId);
+}
 
 // Функция отправки сообщения
 function sendMessage() {
@@ -25,6 +19,11 @@ function sendMessage() {
 
     if (messageText === '') return;
 
+    if (messageText.length > 50) {
+        inputField.value = messageText.slice(0, 50); // Ограничение на 50 символов
+        return;
+    }
+
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', 'my-message');
     messageElement.textContent = messageText;
@@ -32,15 +31,15 @@ function sendMessage() {
     appendMessage(messageElement);
     inputField.value = '';
 
-    // Отправка на сервер
+    // Отправка сообщения на сервер с идентификатором пользователя
     fetch('/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: messageText, senderId: userId })  // Отправляем идентификатор пользователя
+        body: JSON.stringify({ message: messageText, userId: userId })
     }).then(() => {
-        fetchMessages();  // После отправки сообщения, обновляем чат
+        fetchMessages();  // Обновляем чат после отправки сообщения
     });
 
     scrollToBottom();
@@ -57,11 +56,11 @@ function fetchMessages() {
             data.forEach(message => {
                 const messageElement = document.createElement('div');
                 
-                // Проверка senderId для определения, кто отправил сообщение
-                if (message.senderId === userId) {
-                    messageElement.classList.add('message', 'my-message');  // Сообщение от текущего пользователя
+                // Если сообщение отправлено текущим пользователем, применяем класс для своих сообщений
+                if (message.userId === userId) {
+                    messageElement.classList.add('message', 'my-message');
                 } else {
-                    messageElement.classList.add('message', 'their-message');  // Сообщение от другого пользователя
+                    messageElement.classList.add('message', 'their-message');
                 }
 
                 messageElement.textContent = message.text;
@@ -91,10 +90,5 @@ function scrollToBottom() {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Генерация уникального идентификатора пользователя
-function generateUserId() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-}
-
-// Периодически запрашиваем сообщения с сервера каждые 0,5 секунды
-setInterval(fetchMessages, 500);
+// Периодически запрашиваем сообщения с сервера каждые 2 секунды
+setInterval(fetchMessages, 2000);

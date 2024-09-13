@@ -2,9 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from collections import deque
 import os
 
-app = Flask(__name__, static_folder='static', template_folder='.')
-  # Если HTML файлы в корневой папке
-
+app = Flask(__name__)
 
 # Очередь для хранения сообщений (не более 100)
 messages = deque(maxlen=100)
@@ -28,6 +26,5 @@ def get_history():
     return jsonify(list(messages))
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8000))  # Use PORT environment variable or default to 8000
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-    #kjhcsdhfhsdfsd

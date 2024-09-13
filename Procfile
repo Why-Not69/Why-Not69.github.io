@@ -1,1 +1,1 @@
-web: python main_copy.py
+web: python python.py

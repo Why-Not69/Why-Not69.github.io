@@ -4,7 +4,8 @@ document.getElementById('message-input').addEventListener('keypress', function (
 });
 
 const maxMessages = 100;
-
+let tg = window.Telegram.WebApp
+tg.expand()
 // Генерируем уникальный идентификатор пользователя (если его нет в localStorage)
 let userId = localStorage.getItem('userId');
 if (!userId) {

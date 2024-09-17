@@ -122,6 +122,23 @@ function sendMessage() {
 
     inputField.value = ''; // Очищаем поле ввода после отправки сообщения
 }
+
+document.getElementById('buy-messages-button').addEventListener('click', () => {
+    // Логика пополнения баланса через Telegram звезды
+    alert('Перейдите в Telegram для пополнения баланса');
+    // Здесь будет логика взаимодействия с Telegram API
+});
+
+document.getElementById('close-popup-button').addEventListener('click', () => {
+    // Закрыть окно пополнения и открыть чат
+    document.getElementById('balance-popup').style.display = 'none';
+    document.getElementById('chat-container').style.display = 'block';
+});
+
+// Показать окно пополнения баланса при загрузке страницы
+window.onload = function() {
+    document.getElementById('balance-popup').style.display = 'block';
+}
 ////////// NEW CODE\\\\\\\\\
 // Периодически запрашиваем сообщения с сервера каждые 2 секунды
 setInterval(fetchMessages, 2000);
